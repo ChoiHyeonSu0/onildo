@@ -11,6 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.likelion.onildo.ui.navigation.AppNavHost
+import com.likelion.onildo.ui.screen.home.HomeScreen
 import com.likelion.onildo.ui.theme.OnildoTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,12 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             OnildoTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                AppNavHost()
             }
         }
     }
