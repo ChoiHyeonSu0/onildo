@@ -1,4 +1,13 @@
 package com.likelion.onildo.data.repository
 
-class TilRepository {
+import com.likelion.onildo.data.local.TilDao
+import com.likelion.onildo.data.local.TilEntity
+import dagger.hilt.android.scopes.ViewModelScoped
+import javax.inject.Inject
+
+@ViewModelScoped
+class TilRepository @Inject constructor(private val dao: TilDao) {
+
+    suspend fun insertTil(til: TilEntity): Result<Long> =
+        runCatching { dao.insertTil(til) }
 }

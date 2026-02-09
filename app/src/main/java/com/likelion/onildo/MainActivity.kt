@@ -14,7 +14,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.likelion.onildo.ui.navigation.AppNavHost
 import com.likelion.onildo.ui.screen.home.HomeScreen
 import com.likelion.onildo.ui.theme.OnildoTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

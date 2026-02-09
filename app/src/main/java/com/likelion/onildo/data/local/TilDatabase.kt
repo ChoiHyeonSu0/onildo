@@ -22,7 +22,7 @@ abstract class TilDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     TilDatabase::class.java,
-                    "til_database"
+                    "onildo_db"
                 ).build()
                 INSTANCE = instance
                 instance
