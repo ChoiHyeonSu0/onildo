@@ -1,17 +1,26 @@
 package com.likelion.onildo.ui.screen.write
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,8 +37,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 
@@ -47,9 +60,13 @@ fun TilWriteScreen(
 
     val uiState by viewModel.uiState.collectAsState()
 
+    val context = LocalContext.current
+
     LaunchedEffect(uiState.isSaved) {
         if (uiState.isSaved) {
             Log.d("til", "til saved! title: $title, learned: $learned")
+            Toast.makeText(context, "TIL 작성이 완료되었어요.", Toast.LENGTH_SHORT).show()
+            navController.popBackStack()
             // onNavigateBack()
         }
     }
@@ -64,14 +81,14 @@ fun TilWriteScreen(
                     }
                 },
                 actions = {
-                    TextButton(
+                    /*TextButton(
                         onClick = {
                             viewModel.saveTil(title, learned, difficulty, tomorrow)
                         },
                         enabled = title.isNotBlank() && learned.isNotBlank()
                     ) {
                         Text("저장")
-                    }
+                    }*/
                 }
             )
         }
@@ -130,8 +147,35 @@ fun TilWriteScreen(
                 maxLines = 5
             )
 
+            Spacer(modifier = Modifier.height(40.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                // 저장 버튼
+                Button(
+                    onClick = { viewModel.saveTil(title, learned, difficulty, tomorrow) },
+                    modifier = Modifier.size(width = 120.dp, height = 60.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6750A4)),
+                    shape = RoundedCornerShape(30.dp)
+                ) {
+                    Text("저장", fontSize = 18.sp, color = Color.White)
+                }
+
+                // 취소 버튼
+                Button(
+                    onClick = { /* 취소 로직 */ },
+                    modifier = Modifier.size(width = 120.dp, height = 60.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB3261E)),
+                    shape = RoundedCornerShape(30.dp)
+                ) {
+                    Text("취소", fontSize = 18.sp, color = Color.White)
+                }
+            }
+
             // 로딩 상태
-            /*if (uiState.isLoading) {
+            if (uiState.isLoading) {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
@@ -140,7 +184,7 @@ fun TilWriteScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     Text("AI가 분석 중입니다...")
                 }
-            }*/
+            }
 
             // 에러 메시지
             uiState.error?.let { error ->

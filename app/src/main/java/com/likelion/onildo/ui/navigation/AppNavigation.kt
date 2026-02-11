@@ -1,19 +1,14 @@
 package com.likelion.onildo.ui.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.likelion.onildo.ui.screen.MainScreen
-import com.likelion.onildo.ui.screen.archive.ArchiveScreen
-import com.likelion.onildo.ui.screen.detail.DetailScreen
-import com.likelion.onildo.ui.screen.home.HomeScreen
-import com.likelion.onildo.ui.screen.stats.StatsScreen
+import com.likelion.onildo.ui.screen.detail.TilDetailScreen
 import com.likelion.onildo.ui.screen.write.TilWriteScreen
 
 object AppDestinations {
@@ -21,7 +16,7 @@ object AppDestinations {
     const val STATS = "stats"
     const val ARCHIVE = "archive"
     const val MAIN = "main"
-    const val DETAIL = "detail"
+    const val DETAIL = "detail/{tilId}"
     const val WRITE = "write"
 }
 
@@ -38,8 +33,12 @@ fun AppNavHost() {
             MainScreen(navController = navController)
          }
 
-         composable(AppDestinations.DETAIL) {
-             DetailScreen(navController = navController)
+         composable(
+             route = AppDestinations.DETAIL,
+             arguments = listOf(navArgument("tilId") { type = NavType.StringType } )
+         ) { backStackEntry ->
+             val tilId = backStackEntry.arguments?.getString("userId")
+             TilDetailScreen(navController = navController)
          }
 
          composable(AppDestinations.WRITE) {
