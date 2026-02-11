@@ -18,28 +18,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.likelion.onildo.data.local.TilEntity
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 @Composable
-fun TilListCard(til: TilEntity) {
+fun TilListCard(til: TilEntity, navController: NavController) {
     val emoji = til.emotion!!.toEmoji()
 
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFD199FF)), // 보라색 배경
-        border = CardDefaults.outlinedCardBorder() // 검은색 테두리 효과
+        border = CardDefaults.outlinedCardBorder(), // 검은색 테두리 효과
+        onClick = { navController.navigate("detail/${til.id}")}
     ) {
         Column(
             modifier = Modifier.padding(20.dp)
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = emoji, fontSize = 20.sp)
+            Row(/*verticalAlignment = Alignment.CenterVertically*/) {
+                Text(text = emoji, fontSize = 20.sp, modifier = Modifier.alignByBaseline())
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = til.title, fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                Text(text = til.title, fontSize = 18.sp, fontWeight = FontWeight.Medium,
+                    modifier = Modifier
+                        .weight(1f)
+                        .alignByBaseline())
             }
             Spacer(modifier = Modifier.height(12.dp))
             Text(text = formatMillisToTime(til.createdAt), fontSize = 16.sp)

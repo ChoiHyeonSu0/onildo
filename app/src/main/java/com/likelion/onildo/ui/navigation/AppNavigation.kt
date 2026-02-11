@@ -35,10 +35,10 @@ fun AppNavHost() {
 
          composable(
              route = AppDestinations.DETAIL,
-             arguments = listOf(navArgument("tilId") { type = NavType.StringType } )
+             arguments = listOf(navArgument("tilId") { type = NavType.LongType } )
          ) { backStackEntry ->
-             val tilId = backStackEntry.arguments?.getString("userId")
-             TilDetailScreen(navController = navController)
+             val tilId = backStackEntry.arguments?.getLong("tilId")
+             TilDetailScreen(navController = navController, tilId = tilId)
          }
 
          composable(AppDestinations.WRITE) {

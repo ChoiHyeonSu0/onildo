@@ -49,7 +49,7 @@ fun HomeScreen(
     val tilListState by viewModel.tilListState.collectAsState()
 
     Column(
-        modifier = Modifier.padding(4.dp),
+        modifier = Modifier.padding(20.dp),
         verticalArrangement = Arrangement.Center
     ) {
 
@@ -60,7 +60,7 @@ fun HomeScreen(
 
                 LazyColumn {
                    items(tilList) { item ->
-                        TilListCard(item)
+                        TilListCard(item, rootNavController)
                     }
                 }
             }
@@ -90,16 +90,5 @@ fun HomeScreen(
                 }
             }
         }*/
-
-        Button(
-            onClick = { rootNavController.navigate(AppDestinations.DETAIL) }
-        ) {
-            Text("TIL 상세 페이지")
-        }
-        Button(
-            onClick = { rootNavController.navigate(AppDestinations.WRITE) }
-        ) {
-            Text("TIL 작성 페이지")
-        }
     }
 }

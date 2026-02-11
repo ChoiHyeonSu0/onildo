@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -50,7 +51,6 @@ import androidx.navigation.NavHostController
 @Composable
 fun TilWriteScreen(
     viewModel: TilWriteViewModel = hiltViewModel(),
-    // onNavigateBack: () -> Unit
     navController: NavHostController
 ) {
     var title by rememberSaveable { mutableStateOf("") }
@@ -67,7 +67,6 @@ fun TilWriteScreen(
             Log.d("til", "til saved! title: $title, learned: $learned")
             Toast.makeText(context, "TIL 작성이 완료되었어요.", Toast.LENGTH_SHORT).show()
             navController.popBackStack()
-            // onNavigateBack()
         }
     }
 
@@ -76,20 +75,10 @@ fun TilWriteScreen(
             TopAppBar(
                 title = { Text("TIL 작성") },
                 navigationIcon = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Default.ArrowBack, "뒤로가기")
                     }
                 },
-                actions = {
-                    /*TextButton(
-                        onClick = {
-                            viewModel.saveTil(title, learned, difficulty, tomorrow)
-                        },
-                        enabled = title.isNotBlank() && learned.isNotBlank()
-                    ) {
-                        Text("저장")
-                    }*/
-                }
             )
         }
     ) { padding ->
@@ -101,6 +90,8 @@ fun TilWriteScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            Text("* 항목은 필수적으로 입력해야 합니다.")
+
             // 제목
             OutlinedTextField(
                 value = title,
@@ -165,7 +156,7 @@ fun TilWriteScreen(
 
                 // 취소 버튼
                 Button(
-                    onClick = { /* 취소 로직 */ },
+                    onClick = { navController.popBackStack() },
                     modifier = Modifier.size(width = 120.dp, height = 60.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB3261E)),
                     shape = RoundedCornerShape(30.dp)
@@ -176,13 +167,13 @@ fun TilWriteScreen(
 
             // 로딩 상태
             if (uiState.isLoading) {
-                Box(
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     CircularProgressIndicator()
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text("AI가 분석 중입니다...")
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("AI가 분석 중입니다. 기다려 주세요..")
                 }
             }
 

@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.likelion.onildo.ui.component.BottomNavigationBar
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable

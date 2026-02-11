@@ -15,6 +15,9 @@ class TilRepository @Inject constructor(private val dao: TilDao) {
     suspend fun getAllTils(): Result<Flow<List<TilEntity>>> =
         runCatching { dao.getAllTils() }
 
+    suspend fun getTilById(id: Long): Result<TilEntity?> =
+        runCatching { dao.getTilById(id)  }
+
     suspend fun deleteTil(til: TilEntity): Result<Unit> =
         runCatching { dao.deleteTil(til) }
 }
