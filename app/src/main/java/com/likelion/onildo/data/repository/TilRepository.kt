@@ -2,12 +2,17 @@ package com.likelion.onildo.data.repository
 
 import com.likelion.onildo.data.local.TilDao
 import com.likelion.onildo.data.local.TilEntity
+import com.likelion.onildo.data.remote.TilRemoteDataSource
+import com.likelion.onildo.model.TilAnalysisResult
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @ViewModelScoped
-class TilRepository @Inject constructor(private val dao: TilDao) {
+class TilRepository @Inject constructor(
+    private val dao: TilDao,
+    private val dataSource: TilRemoteDataSource
+    ) {
 
     suspend fun insertTil(til: TilEntity): Result<Long> =
         runCatching { dao.insertTil(til) }
@@ -20,4 +25,12 @@ class TilRepository @Inject constructor(private val dao: TilDao) {
 
     suspend fun deleteTil(til: TilEntity): Result<Unit> =
         runCatching { dao.deleteTil(til) }
+
+    suspend fun analyzeTil(
+        title: String,
+        learned: String,
+        difficulty: String?,
+        tomorrow: String?
+    ): Result<TilAnalysisResult> =
+        runCatching { dataSource.analyzeTil(title, learned, difficulty, tomorrow) }
 }

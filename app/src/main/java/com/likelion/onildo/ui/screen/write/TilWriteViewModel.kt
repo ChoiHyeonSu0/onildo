@@ -3,7 +3,6 @@ package com.likelion.onildo.ui.screen.write
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.likelion.onildo.data.local.TilEntity
-import com.likelion.onildo.data.remote.OpenAIService
 import com.likelion.onildo.data.repository.TilRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,8 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TilWriteViewModel @Inject constructor(
-    private val repository: TilRepository,
-    private val openAIService: OpenAIService
+    private val repository: TilRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(WriteUiState())
@@ -32,12 +30,12 @@ class TilWriteViewModel @Inject constructor(
 
             try {
                 // AI 분석 수행
-                val analysis = openAIService.analyzeTil(
+                val analysis = repository.analyzeTil(
                     title = title,
                     learned = learned,
                     difficulty = difficulty.ifBlank { null },
                     tomorrow = tomorrow.ifBlank { null }
-                )
+                ).getOrThrow()
 
                 // TIL 저장
                 val til = TilEntity(
