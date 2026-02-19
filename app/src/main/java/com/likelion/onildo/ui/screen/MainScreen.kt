@@ -61,7 +61,7 @@ fun MainScreen(
         floatingActionButton = {
             if(currentRoute == AppDestinations.HOME) {
                 FloatingActionButton(onClick = {
-                    navController.navigate(AppDestinations.WRITE)
+                    navController.navigate("write")
                 }) {
                     Icon(Icons.Default.Add, "새 TIL 작성")
                 }

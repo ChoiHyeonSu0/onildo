@@ -99,4 +99,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
+    // =============== Vico 차트 ===============
+    implementation("com.patrykandpatrick.vico:compose-m3:1.13.1")
+
 }

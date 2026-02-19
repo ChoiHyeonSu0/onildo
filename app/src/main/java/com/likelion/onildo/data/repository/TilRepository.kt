@@ -17,11 +17,14 @@ class TilRepository @Inject constructor(
     suspend fun insertTil(til: TilEntity): Result<Long> =
         runCatching { dao.insertTil(til) }
 
-    suspend fun getAllTils(): Result<Flow<List<TilEntity>>> =
-        runCatching { dao.getAllTils() }
+    fun getAllTils(): Result<Flow<List<TilEntity>>> =
+         runCatching { dao.getAllTils() }
 
     suspend fun getTilById(id: Long): Result<TilEntity?> =
         runCatching { dao.getTilById(id)  }
+
+    suspend fun updateTil(til: TilEntity): Result<Unit> =
+        runCatching { dao.updateTil(til) }
 
     suspend fun deleteTil(til: TilEntity): Result<Unit> =
         runCatching { dao.deleteTil(til) }

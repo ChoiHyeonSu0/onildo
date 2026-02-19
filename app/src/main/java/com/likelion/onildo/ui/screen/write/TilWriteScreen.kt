@@ -46,6 +46,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.likelion.onildo.data.local.TilEntity
+import com.likelion.onildo.ui.screen.detail.TilDetailState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,18 +55,26 @@ fun TilWriteScreen(
     viewModel: TilWriteViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
-    var title by rememberSaveable { mutableStateOf("") }
+    /*var title by rememberSaveable { mutableStateOf("") }
     var learned by rememberSaveable { mutableStateOf("") }
     var difficulty by rememberSaveable { mutableStateOf("") }
-    var tomorrow by rememberSaveable { mutableStateOf("") }
+    var tomorrow by rememberSaveable { mutableStateOf("") }*/
 
     val uiState by viewModel.uiState.collectAsState()
+    val tilDetailState by viewModel.tilDetailState.collectAsState()
 
     val context = LocalContext.current
 
+    LaunchedEffect(tilDetailState) {
+        Log.d("til", viewModel.tilId.toString())
+        if(viewModel.tilId != null) {
+            viewModel.getTilById(viewModel.tilId)
+        }
+    }
+
     LaunchedEffect(uiState.isSaved) {
         if (uiState.isSaved) {
-            Log.d("til", "til saved! title: $title, learned: $learned")
+            // Log.d("til", "til saved! title: $title, learned: $learned")
             Toast.makeText(context, "TIL 작성이 완료되었어요.", Toast.LENGTH_SHORT).show()
             navController.popBackStack()
         }
@@ -94,8 +104,8 @@ fun TilWriteScreen(
 
             // 제목
             OutlinedTextField(
-                value = title,
-                onValueChange = { title = it },
+                value = viewModel.title,
+                onValueChange = { viewModel.onTitleChange(it) },
                 label = { Text("제목 *") },
                 placeholder = { Text("오늘의 TIL 제목을 입력하세요") },
                 modifier = Modifier.fillMaxWidth(),
@@ -104,8 +114,8 @@ fun TilWriteScreen(
 
             // 오늘 배운 것
             OutlinedTextField(
-                value = learned,
-                onValueChange = { learned = it },
+                value = viewModel.learned,
+                onValueChange = { viewModel.onLearnedChange(it) },
                 label = { Text("오늘 배운 것 *") },
                 placeholder = { Text("오늘 무엇을 배웠나요?") },
                 modifier = Modifier
@@ -116,8 +126,8 @@ fun TilWriteScreen(
 
             // 어려웠던 점
             OutlinedTextField(
-                value = difficulty,
-                onValueChange = { difficulty = it },
+                value = viewModel.difficulty,
+                onValueChange = { viewModel.onDifficultyChange(it) },
                 label = { Text("어려웠던 점") },
                 placeholder = { Text("어려웠던 부분이 있었나요?") },
                 modifier = Modifier
@@ -128,8 +138,8 @@ fun TilWriteScreen(
 
             // 내일 할 일
             OutlinedTextField(
-                value = tomorrow,
-                onValueChange = { tomorrow = it },
+                value = viewModel.tomorrow,
+                onValueChange = {viewModel.onTomorrowChange(it) },
                 label = { Text("내일 할 일") },
                 placeholder = { Text("내일은 무엇을 공부할 예정인가요?") },
                 modifier = Modifier
@@ -146,7 +156,8 @@ fun TilWriteScreen(
             ) {
                 // 저장 버튼
                 Button(
-                    onClick = { viewModel.saveTil(title, learned, difficulty, tomorrow) },
+                    onClick = { viewModel.saveOrUpdateTil(
+                        viewModel.title, viewModel.learned, viewModel.difficulty, viewModel.tomorrow) },
                     modifier = Modifier.size(width = 120.dp, height = 60.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6750A4)),
                     shape = RoundedCornerShape(30.dp)

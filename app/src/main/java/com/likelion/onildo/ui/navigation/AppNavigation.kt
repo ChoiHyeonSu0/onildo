@@ -17,13 +17,12 @@ object AppDestinations {
     const val ARCHIVE = "archive"
     const val MAIN = "main"
     const val DETAIL = "detail/{tilId}"
-    const val WRITE = "write"
+    const val WRITE = "write?tilId={tilId}"
 }
 
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController()
-    val context = LocalContext.current
 
      NavHost(
          navController = navController,
@@ -41,20 +40,14 @@ fun AppNavHost() {
              TilDetailScreen(navController = navController, tilId = tilId)
          }
 
-         composable(AppDestinations.WRITE) {
+         composable(
+             AppDestinations.WRITE,
+             arguments = listOf(navArgument("tilId") {
+                 type = NavType.LongType
+                 defaultValue = -1L
+             } )
+         ) {
              TilWriteScreen(navController = navController)
          }
     }
 }
-
-/*
-rootNavController: NavHostController,
-innerNavController: NavHostController,
-innerPadding: PaddingValues,
-
-NavHost(
-        navController = innerNavController,
-        startDestination = AppDestinations.HOME,
-        modifier = Modifier.padding(innerPadding)
-    )
-*/
